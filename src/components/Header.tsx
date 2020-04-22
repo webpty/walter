@@ -42,12 +42,36 @@ const styles = (theme: Theme) =>
   });
 
 interface HeaderProps extends WithStyles<typeof styles> {
-  onDrawerToggle: () => void;
+  onDrawerToggle: () => void
+  selectLocale: Function
+  currentLocale: string
 }
 
-function Header(props: HeaderProps) {
-  const { classes, onDrawerToggle } = props;
+const Header: React.FC<HeaderProps> = (props) => {
+  const {classes, onDrawerToggle, selectLocale, currentLocale } = props;
 
+  const [tabValue, setTabValue] = React.useState(0);
+
+  const interceptSelectLocale = (lang: string) => {
+    if (lang === currentLocale) {
+      return null
+    }
+    selectLocale(lang);
+
+    switch (lang) {
+      case "en": {
+        setTabValue(1)
+        break
+      }
+      case "es": {
+        setTabValue(2)
+        break
+      }
+      default: {
+        setTabValue(0)
+      }
+    }
+  }
   return (
     <React.Fragment>
       
@@ -87,10 +111,10 @@ function Header(props: HeaderProps) {
         position="static"
         elevation={0}
       >
-        <Tabs value={0} textColor="inherit">
-          <Tab textColor="inherit" label="Français" />
-          <Tab textColor="inherit" label="English" />
-          <Tab textColor="inherit" label="Español" />
+        <Tabs value={tabValue} textColor="inherit">
+          <Tab textColor="inherit" label="Français" onClick={() => interceptSelectLocale("fr")} />
+          <Tab textColor="inherit" label="English" onClick={() => interceptSelectLocale("en")} />
+          <Tab textColor="inherit" label="Español" onClick={() => interceptSelectLocale("es")} />
         </Tabs>
       </AppBar>
     </React.Fragment>

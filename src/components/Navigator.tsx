@@ -1,8 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import {createStyles, Theme, withStyles, WithStyles} from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
+import Drawer, {DrawerProps} from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -17,18 +17,18 @@ import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponen
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PhonelinkSetupIcon from '@material-ui/icons/PhonelinkSetup';
-import { Omit } from '@material-ui/types';
+import {Omit} from '@material-ui/types';
 import {Link} from 'react-router-dom';
 
 const categories = [
   {
     id: 'Le pain',
     children: [
-      {id: 'Recette', to: '/',icon: <PermMediaOutlinedIcon />, active: true },
-      {id: 'Ingrédients', to: '/ingredients',icon: <PermMediaOutlinedIcon /> },
-      {id: 'Le levain', to: '/the-leven', icon: <PermMediaOutlinedIcon /> },
-      {id: 'Photos', to: '/photos',icon: <PermMediaOutlinedIcon /> },
-      {id: 'Resources', to: '/resources',icon: <PermMediaOutlinedIcon /> },
+      {id: 'Recette', to: '/', icon: <PermMediaOutlinedIcon />, active: true},
+      {id: 'Ingrédients', to: '/ingredients', icon: <PermMediaOutlinedIcon />},
+      {id: 'Le levain', to: '/the-leven', icon: <PermMediaOutlinedIcon />},
+      {id: 'Photos', to: '/photos', icon: <PermMediaOutlinedIcon />},
+      {id: 'Resources', to: '/resources', icon: <PermMediaOutlinedIcon />},
     ],
   },
   // {
@@ -86,7 +86,7 @@ const styles = (theme: Theme) =>
 export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> {}
 
 function Navigator(props: NavigatorProps) {
-  const { classes, ...other } = props;
+  const {classes, ...other} = props;
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -106,7 +106,7 @@ function Navigator(props: NavigatorProps) {
             Project Overview
           </ListItemText>
         </ListItem> */}
-        {categories.map(({ id, children }) => (
+        {categories.map(({id, children}) => (
           <React.Fragment key={id}>
             <ListItem className={classes.categoryHeader}>
               <ListItemText
@@ -117,22 +117,21 @@ function Navigator(props: NavigatorProps) {
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active, to }) => (
-              <Link to={to}>
-              <ListItem
-                key={childId}
-                button
-                className={clsx(classes.item, active && classes.itemActiveItem)}
-              >
-                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-                <ListItemText
-                  classes={{
-                    primary: classes.itemPrimary,
-                  }}
+            {children.map(({id: childId, icon, active, to}) => (
+              <Link to={to} key={childId}>
+                <ListItem
+                  button
+                  className={clsx(classes.item, active && classes.itemActiveItem)}
                 >
-                  {childId}
-                </ListItemText>
-              </ListItem>
+                  <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+                  <ListItemText
+                    classes={{
+                      primary: classes.itemPrimary,
+                    }}
+                  >
+                    {childId}
+                  </ListItemText>
+                </ListItem>
               </Link>
             ))}
             <Divider className={classes.divider} />

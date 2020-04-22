@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {Switch, Route} from 'react-router-dom'
 import {
   createMuiTheme,
@@ -6,14 +6,16 @@ import {
   ThemeProvider,
   withStyles,
   WithStyles,
-} from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Hidden from '@material-ui/core/Hidden';
-import Typography from '@material-ui/core/Typography';
-import Navigator from './components/Navigator';
-import Recipe from './components/Recipe';
-import Ingredients from './components/Ingredients';
-import Header from './components/Header';
+} from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Hidden from '@material-ui/core/Hidden'
+import Typography from '@material-ui/core/Typography'
+import Navigator from './components/Navigator'
+import Recipe from './components/Recipe'
+import Ingredients from './components/Ingredients'
+import Header from './components/Header'
+import {IntlProvider} from 'react-intl'
+import {en, es, fr} from './languages/recipe'
 
 function Copyright() {
   return (
@@ -23,7 +25,7 @@ function Copyright() {
       {new Date().getFullYear()}
       {'.'}
     </Typography>
-  );
+  )
 }
 
 let theme = createMuiTheme({
@@ -54,7 +56,7 @@ let theme = createMuiTheme({
       minHeight: 48,
     },
   },
-});
+})
 
 theme = {
   ...theme,
@@ -134,9 +136,9 @@ theme = {
       },
     },
   },
-};
+}
 
-const drawerWidth = 256;
+const drawerWidth = 256
 
 const styles = createStyles({
   root: {
@@ -163,54 +165,76 @@ const styles = createStyles({
     padding: theme.spacing(2),
     background: '#eaeff1',
   },
-});
+})
 
 export interface AppProps extends WithStyles<typeof styles> {}
 
 const App: React.FC<AppProps> = (props) => {
-  const { classes } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const {classes} = props
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    setMobileOpen(!mobileOpen)
+  }
+  const [locale, setLocale] = React.useState("en")
+  const [currentMessages, setCurrentMessages] = React.useState(fr)
+
+  const selectLocale = (lang: string) => {
+    setLocale(lang)
+
+    switch (lang) {
+      case "en": {
+        setCurrentMessages(en)
+        break
+      }
+      case "es": {
+        setCurrentMessages(es)
+        break
+      }
+      default: {
+        setCurrentMessages(fr)
+      }
+    }
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className={classes.root}>
-        <CssBaseline />
-        <nav className={classes.drawer}>
-          <Hidden smUp implementation="js">
-            <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-            />
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} />
-          </Hidden>
-        </nav>
-        <div className={classes.app}>
-          <Header onDrawerToggle={handleDrawerToggle} />
-          <main className={classes.main}>
-            <Switch>
-              <Route path="/" exact>
-                <Recipe />
-              </Route>
-              <Route path="/ingredients">
-                <Ingredients />
-              </Route>
-            </Switch>
-          </main>
-          <footer className={classes.footer}>
-            <Copyright />
-          </footer>
+    <IntlProvider locale={locale} messages={currentMessages}>
+      <ThemeProvider theme={theme}>
+        <div className={classes.root}>
+          <CssBaseline />
+          <nav className={classes.drawer}>
+            <Hidden smUp implementation="js">
+              <Navigator
+                PaperProps={{style: {width: drawerWidth}}}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+              />
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Navigator PaperProps={{style: {width: drawerWidth}}} />
+            </Hidden>
+          </nav>
+          <div className={classes.app}>
+            <Header onDrawerToggle={handleDrawerToggle} selectLocale={selectLocale} currentLocale={locale} />
+            <main className={classes.main}>
+              <Switch>
+                <Route path="/" exact>
+                  <Recipe />
+                </Route>
+                <Route path="/ingredients">
+                  <Ingredients />
+                </Route>
+              </Switch>
+            </main>
+            <footer className={classes.footer}>
+              <Copyright />
+            </footer>
+          </div>
         </div>
-      </div>
-    </ThemeProvider>
-  );
+      </ThemeProvider>
+    </IntlProvider>
+  )
 }
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(App)
